@@ -119,18 +119,22 @@ export async function deleteAllReviews(): Promise<void> {
   }
 }
 
-export async function getAllReviewsByUser(
-  userId: string | undefined
-): Promise<ReviewDocument[]> {
+export async function getAllReviewsByUser({
+  userId,
+  isClientFetch = false,
+}: {
+  userId: string | undefined;
+  isClientFetch?: boolean;
+}): Promise<ReviewDocument[] | null> {
   try {
     await connectToDB();
 
     const reviews = await Review.find({ userId })
-      .populate('carId', 'carTitle carImages') // Including carImages here
+      .populate('carId', 'carTitle carImages')
       .populate('userId', 'username image')
       .exec();
 
-    if (!reviews) {
+    if (!reviews || reviews.length === 0) {
       throw new Error('No reviews found for the specified user.');
     }
 
@@ -144,8 +148,11 @@ export async function getAllReviewsByUser(
       }
     });
 
-    // @ts-ignore
-    return reviews.reverse();
+    if (isClientFetch) {
+      return reviews.reverse().map((review) => review.toObject());
+    }
+
+    return reviews.reverse() as ReviewDocument[];
   } catch (error: any) {
     throw new Error(`Failed to fetch reviews for the user: ${error.message}`);
   }

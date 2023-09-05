@@ -11,7 +11,7 @@ const Page = async () => {
 
   try {
     user = await currentUser();
-    userMongo = await userFromDB(user?.id);
+    userMongo = await userFromDB({ userName: user?.id });
     userIdString = objectToStringId(userMongo?._id);
   } catch (err) {
     console.error(err);

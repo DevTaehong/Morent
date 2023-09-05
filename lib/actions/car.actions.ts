@@ -8,6 +8,139 @@ import Car from '../models/car.model';
 import Review from '../models/review.model';
 import { CarParams, ReviewDocument } from '../interfaces';
 
+export async function createCar(carData: CarParams): Promise<CarParams> {
+  try {
+    await connectToDB();
+    const car = new Car(carData);
+    await car.save();
+
+    await User.findByIdAndUpdate(carData.userId, {
+      $push: { carsAdded: { car: car._id } },
+    });
+
+    return car.toObject();
+  } catch (error: any) {
+    throw new Error(`Failed to create car: ${error.message}`);
+  }
+}
+
+export async function editCar(carData: CarParams): Promise<CarParams> {
+  if (!carData._id) {
+    throw new Error('Car ID is required to edit.');
+  }
+
+  try {
+    await connectToDB();
+    const updatedCar = await Car.findByIdAndUpdate(carData._id!, carData, {
+      new: true,
+    });
+
+    if (!updatedCar) {
+      throw new Error('Failed to find and update the car.');
+    }
+
+    return updatedCar.toObject();
+  } catch (error: any) {
+    throw new Error(`Failed to edit car: ${error.message}`);
+  }
+}
+
+export async function deleteCar(carId: string): Promise<void> {
+  try {
+    await connectToDB();
+    const car = await Car.findById(carId);
+    if (!car) {
+      throw new Error('Car not found.');
+    }
+
+    await User.findByIdAndUpdate(car.userId, {
+      $pull: {
+        carsAdded: { car: car._id },
+        carsRented: { car: car._id },
+      },
+    });
+
+    await Car.findByIdAndRemove(carId);
+  } catch (error: any) {
+    throw new Error(
+      `Failed to delete car and its associated reviews: ${error.message}`
+    );
+  }
+}
+
+export async function editCarDisabledDates(
+  carId: string,
+  dateRange: { from: Date; to: Date }
+): Promise<CarParams | null> {
+  console.log('Starting editCarDisabledDates function...');
+
+  await connectToDB();
+  console.log('Connected to the database.');
+
+  // Find the car with the provided carId
+  console.log(`Looking for car with id: ${carId}`);
+  const car = await Car.findById(carId).exec();
+
+  if (!car) {
+    console.warn('Car not found.');
+    return null;
+  }
+  console.log('Car found.');
+
+  // Check if the dateRange is already in the car's dateRanges array
+  console.log(
+    "Checking if the date range is already in the car's disabled dates..."
+  );
+  const exists = car.disabledDates.dateRanges.some(
+    // @ts-ignore
+    (range) => range.from === dateRange.from && range.to === dateRange.to
+  );
+
+  if (exists) {
+    console.warn("Date range already added to the car's disabled dates.");
+    return car.toObject();
+  }
+  console.log('Date range not yet added. Proceeding to add...');
+
+  // Add the dateRange to the car's disabledDates.dateRanges array
+  car.disabledDates.dateRanges.push(dateRange);
+  console.log(
+    `Date range from ${dateRange.from} to ${dateRange.to} added to the car's disabled dates.`
+  );
+
+  await car.save();
+  console.log('Car updated successfully.');
+
+  return car.toObject();
+}
+
+export async function likeCar(carId: string, userId: string): Promise<void> {
+  try {
+    await connectToDB();
+    const car = await Car.findById(carId);
+    if (!car) {
+      throw new Error('Car not found.');
+    }
+
+    // Use $addToSet to ensure no duplicate likes from the same user
+    const updatedCar = await Car.findByIdAndUpdate(
+      carId,
+      {
+        $addToSet: { likes: userId },
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (!updatedCar) {
+      throw new Error('Failed to like the car.');
+    }
+  } catch (error: any) {
+    throw new Error(`Failed to like car: ${error.message}`);
+  }
+}
+
 export async function fetchRecommendedCars(): Promise<CarParams[] | null> {
   try {
     connectToDB();
@@ -177,66 +310,6 @@ export async function fetchCarsRentedByUser(
   }
 }
 
-export async function createCar(carData: CarParams): Promise<CarParams> {
-  try {
-    await connectToDB();
-    const car = new Car(carData);
-    await car.save();
-
-    await User.findByIdAndUpdate(carData.userId, {
-      $push: { carsAdded: { car: car._id } },
-    });
-
-    return car.toObject();
-  } catch (error: any) {
-    throw new Error(`Failed to create car: ${error.message}`);
-  }
-}
-
-export async function deleteCar(carId: string): Promise<void> {
-  try {
-    await connectToDB();
-    const car = await Car.findById(carId);
-    if (!car) {
-      throw new Error('Car not found.');
-    }
-
-    await User.findByIdAndUpdate(car.userId, {
-      $pull: {
-        carsAdded: { car: car._id },
-        carsRented: { car: car._id },
-      },
-    });
-
-    await Car.findByIdAndRemove(carId);
-  } catch (error: any) {
-    throw new Error(
-      `Failed to delete car and its associated reviews: ${error.message}`
-    );
-  }
-}
-
-export async function editCar(carData: CarParams): Promise<CarParams> {
-  if (!carData._id) {
-    throw new Error('Car ID is required to edit.');
-  }
-
-  try {
-    await connectToDB();
-    const updatedCar = await Car.findByIdAndUpdate(carData._id!, carData, {
-      new: true,
-    });
-
-    if (!updatedCar) {
-      throw new Error('Failed to find and update the car.');
-    }
-
-    return updatedCar.toObject();
-  } catch (error: any) {
-    throw new Error(`Failed to edit car: ${error.message}`);
-  }
-}
-
 export async function fetchCarById(carId: string): Promise<CarParams | null> {
   try {
     await connectToDB();
@@ -299,52 +372,6 @@ export async function deleteAllCars(): Promise<void> {
   }
 }
 
-export async function editCarDisabledDates(
-  carId: string,
-  dateRange: { from: Date; to: Date }
-): Promise<CarParams | null> {
-  console.log('Starting editCarDisabledDates function...');
-
-  await connectToDB();
-  console.log('Connected to the database.');
-
-  // Find the car with the provided carId
-  console.log(`Looking for car with id: ${carId}`);
-  const car = await Car.findById(carId).exec();
-
-  if (!car) {
-    console.warn('Car not found.');
-    return null;
-  }
-  console.log('Car found.');
-
-  // Check if the dateRange is already in the car's dateRanges array
-  console.log(
-    "Checking if the date range is already in the car's disabled dates..."
-  );
-  const exists = car.disabledDates.dateRanges.some(
-    // @ts-ignore
-    (range) => range.from === dateRange.from && range.to === dateRange.to
-  );
-
-  if (exists) {
-    console.warn("Date range already added to the car's disabled dates.");
-    return car.toObject();
-  }
-  console.log('Date range not yet added. Proceeding to add...');
-
-  // Add the dateRange to the car's disabledDates.dateRanges array
-  car.disabledDates.dateRanges.push(dateRange);
-  console.log(
-    `Date range from ${dateRange.from} to ${dateRange.to} added to the car's disabled dates.`
-  );
-
-  await car.save();
-  console.log('Car updated successfully.');
-
-  return car.toObject();
-}
-
 export async function getAllReviewsForCar(
   carId: mongoose.Types.ObjectId
 ): Promise<ReviewDocument[]> {
@@ -384,32 +411,5 @@ export async function getCarsByLocation(
     return cars.map((car) => car.toObject() as CarParams);
   } catch (error: any) {
     throw new Error(`Failed to get cars by location: ${error.message}`);
-  }
-}
-
-export async function likeCar(carId: string, userId: string): Promise<void> {
-  try {
-    await connectToDB();
-    const car = await Car.findById(carId);
-    if (!car) {
-      throw new Error('Car not found.');
-    }
-
-    // Use $addToSet to ensure no duplicate likes from the same user
-    const updatedCar = await Car.findByIdAndUpdate(
-      carId,
-      {
-        $addToSet: { likes: userId },
-      },
-      {
-        new: true,
-      }
-    );
-
-    if (!updatedCar) {
-      throw new Error('Failed to like the car.');
-    }
-  } catch (error: any) {
-    throw new Error(`Failed to like car: ${error.message}`);
   }
 }
