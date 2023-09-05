@@ -54,7 +54,7 @@ const ProfilePage: React.FC = () => {
       <div className="mt-20 flex w-full max-w-[90rem] flex-col p-6 md:mt-40">
         <ProfileHeading
           userData={JSON.stringify(userData)}
-          reviews={reviews || ''}
+          reviews={reviews || '{}'}
         />
         <RentedCars rentedCars={carsRented || ''} />
         <UsersCarsForRent carsForRent={addedCars || ''} />

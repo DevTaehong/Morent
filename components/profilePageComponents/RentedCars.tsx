@@ -9,7 +9,7 @@ interface RentedCarsProps {
 
 const RentedCars: React.FC<RentedCarsProps> = ({ rentedCars }) => {
   const [showMore, setShowMore] = useState(false);
-  const parsedRentedCars = JSON.parse(rentedCars);
+  const parsedRentedCars = rentedCars ? JSON.parse(rentedCars) : null;
   return (
     <>
       <div className="flex w-full justify-between">

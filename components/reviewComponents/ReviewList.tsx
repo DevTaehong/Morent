@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useTheme } from "next-themes";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { usePathname } from "next/navigation";
+import React, { useState } from 'react';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 
-import Review from "./Review";
-import { ReviewData } from "@/lib/interfaces";
+import Review from './Review';
+import { ReviewData } from '@/lib/interfaces';
 
-import { whiteCross, cross } from "@/public/svg-icons";
+import { whiteCross, cross } from '@/public/svg-icons';
 
 type ReviewListProps = {
   reviews: ReviewData[];
@@ -42,7 +42,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
   return (
     <div
       className={`fixed inset-0 z-40 flex justify-center ${
-        pathname === "/profile" && "bg-black/40"
+        pathname === '/profile' && 'bg-black/40'
       }`}
       onClick={handleBackgroundClick}
     >
@@ -57,7 +57,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
             List of reviews
           </p>
           <Image
-            src={theme === "light" ? cross : whiteCross}
+            src={theme === 'light' ? cross : whiteCross}
             height={30}
             width={30}
             alt="close modal"
@@ -66,7 +66,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
           />
         </div>
         <div className="flex w-full flex-col gap-5">
-          {reviews.map((review) => (
+          {reviews?.map((review) => (
             <Review key={review._id} reviewData={review} canEdit={canEdit} />
           ))}
         </div>

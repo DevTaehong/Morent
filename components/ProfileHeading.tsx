@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import React, { useState, useRef, ChangeEvent } from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
+import Link from 'next/link';
+import React, { useState, useRef, ChangeEvent } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
 
-import ReviewList from "./reviewComponents/ReviewList";
-import { profileDefaultCover } from "@/public/pngs";
+import ReviewList from './reviewComponents/ReviewList';
+import { profileDefaultCover } from '@/public/pngs';
 
 type ProfileHeadingProps = {
   userData: string;
@@ -18,12 +18,12 @@ const ProfileHeading: React.FC<ProfileHeadingProps> = ({
   reviews,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const parsedReviews = JSON.parse(reviews);
+  const parsedReviews = reviews ? JSON.parse(reviews) : null;
   const parsedUserData = JSON.parse(userData);
 
   const handleEditCover = () => {
     if (inputRef.current) {
-      inputRef.current.value = "";
+      inputRef.current.value = '';
       inputRef.current.click();
     }
   };
@@ -64,8 +64,8 @@ const ProfileHeading: React.FC<ProfileHeadingProps> = ({
             alt="cover-picture"
             layout="fill"
             style={{
-              objectFit: "cover",
-              objectPosition: "center 80%",
+              objectFit: 'cover',
+              objectPosition: 'center 80%',
             }}
             className="rounded-t-xl"
           />

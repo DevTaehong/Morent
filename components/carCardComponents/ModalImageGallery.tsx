@@ -31,7 +31,7 @@ const ModalImageGallery: React.FC<ModalImageGalleryProps> = ({
         className="flex h-[15rem] w-full max-w-full items-center justify-center rounded-lg md:max-w-full lg:min-h-[18rem]"
       >
         <Image
-          src={images[0] || advertSilverCar}
+          src={displayPicture || advertSilverCar}
           alt="main display picture"
           width={300}
           height={225}
