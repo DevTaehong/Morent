@@ -5,11 +5,12 @@ import {
 } from '@/lib/actions/car.actions';
 import { getAllReviewsByUser } from '@/lib/actions/review.actions';
 import { showError } from '@/lib/toastHandler';
+import { ToastFunction } from '@/lib/interfaces';
 
 export async function fetchUserData(
   userId: string,
   setUserData: Function,
-  toast: any
+  toast: ToastFunction
 ): Promise<string | null> {
   try {
     const userDataFetched = await userFromDB({
@@ -27,7 +28,7 @@ export async function fetchUserData(
 export async function fetchRentedCars(
   userId: string,
   setCarsRented: Function,
-  toast: any
+  toast: ToastFunction
 ): Promise<void> {
   try {
     const rentedCars = await fetchCarsRentedByUser(userId);
@@ -40,7 +41,7 @@ export async function fetchRentedCars(
 export async function fetchAddedCars(
   mongoUserId: string,
   setAddedCars: Function,
-  toast: any
+  toast: ToastFunction
 ): Promise<void> {
   try {
     const userAddedCars = await fetchCarsAddedByUser(mongoUserId);
@@ -53,7 +54,7 @@ export async function fetchAddedCars(
 export async function fetchUserReviews(
   mongoUserId: string,
   setReviews: Function,
-  toast: any
+  toast: ToastFunction
 ): Promise<void> {
   try {
     const userReviews = await getAllReviewsByUser({
