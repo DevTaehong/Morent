@@ -113,18 +113,14 @@ const CarForm: React.FC<CarFormProps> = ({ userId, car }) => {
           carImages: values.carImages,
         });
         setSuccess(true);
+        showSuccessMessage(toast, 'Success', 'Car updated successfully');
       } else {
         await createCar({ ...carData, carImages: values.carImages });
         setSuccess(true);
+        showSuccessMessage(toast, 'Success', 'Car registered successfully');
       }
 
-      showSuccessMessage(toast, 'Success', 'Car registered successfully');
-
-      if (pathname === '/cars/new') {
-        router.back();
-      } else {
-        router.push('/');
-      }
+      router.push('/profile');
     } catch (error) {
       console.error('Error occurred during onSubmit:', error);
       handleServerError(error, toast);
