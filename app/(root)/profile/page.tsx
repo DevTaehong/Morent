@@ -3,18 +3,17 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { useToast } from '@/components/ui/use-toast';
-import { showError } from '@/lib/toastHandler';
 
 import ProfileHeading from '@/components/ProfileHeading';
 import RentedCars from '@/components/profilePageComponents/RentedCars';
 import UsersCarsForRent from '@/components/profilePageComponents/UsersCarsForRent';
-import { userFromDB } from '@/lib/actions/user.actions';
-import {
-  fetchCarsAddedByUser,
-  fetchCarsRentedByUser,
-} from '@/lib/actions/car.actions';
-import { getAllReviewsByUser } from '@/lib/actions/review.actions';
 import { UserParams } from '@/lib/interfaces';
+import {
+  fetchUserData,
+  fetchRentedCars,
+  fetchAddedCars,
+  fetchUserReviews,
+} from '@/components/profilePageComponents/profile.utils';
 
 const ProfilePage: React.FC = () => {
   const [userData, setUserData] = useState<UserParams | null>(null);
@@ -27,56 +26,12 @@ const ProfilePage: React.FC = () => {
   useEffect(() => {
     async function fetchData() {
       if (isLoaded && userId) {
-        const mongoUserId = await fetchUserData(userId);
+        const mongoUserId = await fetchUserData(userId, setUserData, toast);
         if (mongoUserId) {
-          await fetchRentedCars(userId);
-          await fetchAddedCars(mongoUserId);
-          await fetchUserReviews(mongoUserId);
+          await fetchRentedCars(userId, setCarsRented, toast);
+          await fetchAddedCars(mongoUserId, setAddedCars, toast);
+          await fetchUserReviews(mongoUserId, setReviews, toast);
         }
-      }
-    }
-
-    async function fetchUserData(userId: string): Promise<string | null> {
-      try {
-        const userDataFetched = await userFromDB({
-          userName: userId,
-          isClientFetch: true,
-        });
-        setUserData(userDataFetched);
-        return userDataFetched?._id ? userDataFetched?._id?.toString() : null;
-      } catch (error) {
-        showError(toast, 'Error', 'Error fetching user data.');
-        return null;
-      }
-    }
-
-    async function fetchRentedCars(userId: string): Promise<void> {
-      try {
-        const rentedCars = await fetchCarsRentedByUser(userId);
-        setCarsRented(JSON.stringify(rentedCars));
-      } catch (error) {
-        showError(toast, 'Error', 'Error fetching rented cars.');
-      }
-    }
-
-    async function fetchAddedCars(mongoUserId: string): Promise<void> {
-      try {
-        const userAddedCars = await fetchCarsAddedByUser(mongoUserId);
-        setAddedCars(JSON.stringify(userAddedCars));
-      } catch (error) {
-        showError(toast, 'Error', 'Error fetching added cars.');
-      }
-    }
-
-    async function fetchUserReviews(mongoUserId: string): Promise<void> {
-      try {
-        const userReviews = await getAllReviewsByUser({
-          userId: mongoUserId,
-          isClientFetch: true,
-        });
-        setReviews(JSON.stringify(userReviews));
-      } catch (error) {
-        showError(toast, 'Error', 'Error fetching user reviews.');
       }
     }
 
