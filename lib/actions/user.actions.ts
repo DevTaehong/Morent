@@ -17,7 +17,6 @@ export async function userFromDB({
   await connectToDB();
 
   const userDocument = await User.findOne({ id: userName });
-  console.log(typeof userDocument);
 
   if (userDocument && isClientFetch) {
     return userDocument.toObject();

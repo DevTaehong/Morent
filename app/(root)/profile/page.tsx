@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@clerk/nextjs';
+import { useToast } from '@/components/ui/use-toast';
+import { showError } from '@/lib/toastHandler';
 
 import ProfileHeading from '@/components/ProfileHeading';
 import RentedCars from '@/components/profilePageComponents/RentedCars';
@@ -20,34 +22,66 @@ const ProfilePage: React.FC = () => {
   const [addedCars, setAddedCars] = useState<string | null>(null);
   const [reviews, setReviews] = useState<string | null>(null);
   const { userId, isLoaded } = useAuth();
+  const { toast } = useToast();
 
   useEffect(() => {
     async function fetchData() {
       if (isLoaded && userId) {
-        try {
-          const userDataFetched = await userFromDB({
-            userName: userId,
-            isClientFetch: true,
-          });
-          setUserData(userDataFetched);
-          const mongoUserId = userDataFetched?._id?.toString();
-          const rentedCars = await fetchCarsRentedByUser(userId);
-          setCarsRented(JSON.stringify(rentedCars));
-          const userAddedCars = await fetchCarsAddedByUser(mongoUserId);
-          setAddedCars(JSON.stringify(userAddedCars));
-          const userReviews = await getAllReviewsByUser({
-            userId: mongoUserId,
-            isClientFetch: true,
-          });
-          setReviews(JSON.stringify(userReviews));
-        } catch (error) {
-          console.error('Error fetching data:', error);
+        const mongoUserId = await fetchUserData(userId);
+        if (mongoUserId) {
+          await fetchRentedCars(userId);
+          await fetchAddedCars(mongoUserId);
+          await fetchUserReviews(mongoUserId);
         }
       }
     }
 
+    async function fetchUserData(userId: string): Promise<string | null> {
+      try {
+        const userDataFetched = await userFromDB({
+          userName: userId,
+          isClientFetch: true,
+        });
+        setUserData(userDataFetched);
+        return userDataFetched?._id ? userDataFetched?._id?.toString() : null;
+      } catch (error) {
+        showError(toast, 'Error', 'Error fetching user data.');
+        return null;
+      }
+    }
+
+    async function fetchRentedCars(userId: string): Promise<void> {
+      try {
+        const rentedCars = await fetchCarsRentedByUser(userId);
+        setCarsRented(JSON.stringify(rentedCars));
+      } catch (error) {
+        showError(toast, 'Error', 'Error fetching rented cars.');
+      }
+    }
+
+    async function fetchAddedCars(mongoUserId: string): Promise<void> {
+      try {
+        const userAddedCars = await fetchCarsAddedByUser(mongoUserId);
+        setAddedCars(JSON.stringify(userAddedCars));
+      } catch (error) {
+        showError(toast, 'Error', 'Error fetching added cars.');
+      }
+    }
+
+    async function fetchUserReviews(mongoUserId: string): Promise<void> {
+      try {
+        const userReviews = await getAllReviewsByUser({
+          userId: mongoUserId,
+          isClientFetch: true,
+        });
+        setReviews(JSON.stringify(userReviews));
+      } catch (error) {
+        showError(toast, 'Error', 'Error fetching user reviews.');
+      }
+    }
+
     fetchData();
-  }, [userId, isLoaded]);
+  }, [userId, isLoaded, toast]);
 
   return (
     <div className="flex w-full justify-center self-center bg-white200 dark:bg-gray900">
