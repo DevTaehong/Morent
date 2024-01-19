@@ -1,11 +1,12 @@
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+
+import { Separator } from "@/components/ui/separator";
 import { footerLinks } from "@/constants";
 
 const Footer = () => {
   return (
-    <div className="flex w-full bg-white dark:bg-gray900">
-      <footer className="flex w-full flex-col bg-white p-6 dark:bg-gray900 xl:px-[2.5rem] xl:pb-[3.75rem] xl:pt-[5rem] 2xl:mx-auto 2xl:max-w-[90rem]">
+    <footer className="flex w-full bg-white dark:bg-gray900">
+      <div className="flex w-full flex-col bg-white p-6 dark:bg-gray900 xl:px-[2.5rem] xl:pb-[3.75rem] xl:pt-[5rem] 2xl:mx-auto 2xl:max-w-[90rem]">
         <div className="flex flex-col md:flex-row md:justify-between">
           {/* Morent & Our vision */}
           <div className="flex flex-col justify-start gap-4">
@@ -68,8 +69,8 @@ const Footer = () => {
           </div>
           <p>©{new Date().getFullYear()} MORENT. All rights reserved.</p>
         </div>
-      </footer>
-    </div>
+      </div>
+    </footer>
   );
 };
 
