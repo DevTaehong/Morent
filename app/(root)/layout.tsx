@@ -12,6 +12,8 @@ import { Toaster } from "@/components/ui/toaster";
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--plus-jakarta-sans",
+  display: "optional",
+  fallback: ["sans-serif"],
 });
 
 export const metadata: Metadata = {
