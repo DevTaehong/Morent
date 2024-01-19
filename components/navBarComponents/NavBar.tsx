@@ -15,7 +15,7 @@ import { clearLocalStorageItems } from "@/utils/utility.clientFunctions";
 
 const NavBar = () => {
   const { user } = useUser();
-  const userImage = user?.profileImageUrl;
+  const userImage = user?.imageUrl;
   const { userId } = useAuth();
   const [showNavMenu, setShowNavMenu] = useState(false);
   const { systemTheme, theme, setTheme } = useTheme();
