@@ -1,12 +1,27 @@
 'use server';
 
 import mongoose from 'mongoose';
+import { revalidatePath } from 'next/cache';
 
 import { connectToDB } from '../mongoose';
 import User from '../models/user.model';
 import Car from '../models/car.model';
 import Review from '../models/review.model';
 import { CarParams, ReviewDocument } from '../interfaces';
+
+export async function deleteCarRevalidate(
+  carId: string
+): Promise<{ message: string }> {
+  try {
+    await deleteCar(carId);
+    revalidatePath('/profile');
+    console.log({ message: 'Success' });
+    return { message: 'Success' };
+  } catch (event: any) {
+    console.log({ message: `There was an error: ${event.message}` });
+    return { message: `There was an error: ${event.message}` };
+  }
+}
 
 export async function createCar(carData: CarParams): Promise<CarParams> {
   try {
