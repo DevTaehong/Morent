@@ -1,11 +1,11 @@
-import { ToastFunction } from './interfaces';
+import { ToastFunction } from "./interfaces";
 
 export const showValidationError = (
   toast: ToastFunction,
   title: string,
   errorFields: string[]
 ) => {
-  const errorMessage = `Errors in: ${errorFields.join(', ')}`;
+  const errorMessage = `Errors in: ${errorFields.join(", ")}`;
   toast({
     title,
     description: errorMessage,
@@ -18,7 +18,7 @@ export const showImageError = (
   description: string
 ) => {
   toast({
-    variant: 'destructive',
+    variant: "destructive",
     title,
     description,
   });
@@ -30,7 +30,7 @@ export const showSuccessMessage = (
   description: string
 ) => {
   toast({
-    variant: 'success',
+    variant: "success",
     title,
     description,
   });
@@ -42,7 +42,19 @@ export const showError = (
   description: string
 ) => {
   toast({
-    variant: 'destructive',
+    variant: "destructive",
+    title,
+    description,
+  });
+};
+
+export const showInformation = (
+  toast: ToastFunction,
+  title: string,
+  description: string
+) => {
+  toast({
+    variant: "information",
     title,
     description,
   });
