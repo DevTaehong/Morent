@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { useAuth } from '@clerk/nextjs';
+import { useEffect, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 
-import ProfileHeading from '@/components/ProfileHeading';
-import RentedCars from '@/components/profilePageComponents/RentedCars';
-import UsersCarsForRent from '@/components/profilePageComponents/UsersCarsForRent';
-import { UserParams } from '@/lib/interfaces';
+import ProfileHeading from "@/components/ProfileHeading";
+import RentedCars from "@/components/profilePageComponents/RentedCars";
+import UsersCarsForRent from "@/components/profilePageComponents/UsersCarsForRent";
+import { UserParams } from "@/lib/interfaces";
 import {
   fetchUserData,
   fetchRentedCars,
   fetchAddedCars,
   fetchUserReviews,
-} from '@/components/profilePageComponents/profile.utils';
-import { useToast } from '@/components/ui/use-toast';
-import Loader from '@/components/transitionPages/Loader';
+} from "@/components/profilePageComponents/profile.utils";
+import { useToast } from "@/components/ui/use-toast";
+import Loader from "@/components/transitionPages/Loader";
 
 const ProfilePage: React.FC = () => {
   const [userData, setUserData] = useState<UserParams | null>(null);
@@ -50,11 +50,11 @@ const ProfilePage: React.FC = () => {
         <div className="mt-20 flex w-full max-w-[90rem] flex-col p-6 md:mt-40">
           <ProfileHeading
             userData={JSON.stringify(userData)}
-            reviews={reviews || '{}'}
+            reviews={reviews || "{}"}
           />
 
-          <RentedCars rentedCars={carsRented || ''} />
-          <UsersCarsForRent carsForRent={addedCars || ''} />
+          <RentedCars rentedCars={carsRented || ""} />
+          <UsersCarsForRent carsForRent={addedCars || ""} />
         </div>
       </div>
     );

@@ -1,19 +1,24 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/components/ui/use-toast";
-import { Form, FormControl, FormItem, FormLabel } from "@/components/ui/form";
 
 import { CarValidation } from "@/lib/validations/car";
 import { isBase64Image } from "@/lib/utils";
 import { useUploadThing } from "@/lib/uploadthing";
-import { createCar, deleteCar, editCar } from "@/lib/actions/car.actions";
-import DragDrop from "./DragDrop";
+import {
+  createCar,
+  deleteCarRevalidate,
+  editCar,
+} from "@/lib/actions/car.actions";
 import { CarFormProps, FileWithPreview } from "@/lib/interfaces";
+import { showImageError, showSuccessMessage } from "@/lib/toastHandler";
+import { useToast } from "@/components/ui/use-toast";
+import { Form, FormControl, FormItem, FormLabel } from "@/components/ui/form";
+import DragDrop from "./DragDrop";
 import {
   carTypes,
   capacities,
@@ -21,7 +26,6 @@ import {
   fuelCapacityOptions,
 } from "@/constants";
 import Location from "../Location";
-
 import {
   CarFormButtons,
   CarFormHeader,
@@ -29,7 +33,6 @@ import {
   InputController,
   SelectInput,
 } from "./components/index";
-
 import CarFormImagePreviews from "./components/CarFormImagePreviews";
 import {
   uploadImages,
@@ -39,7 +42,6 @@ import {
   formatCarData,
   handleServerError,
 } from "./components/form.utilities";
-import { showImageError, showSuccessMessage } from "@/lib/toastHandler";
 
 const CarForm: React.FC<CarFormProps> = ({ userId, car }) => {
   const { startUpload } = useUploadThing("media");
@@ -132,7 +134,7 @@ const CarForm: React.FC<CarFormProps> = ({ userId, car }) => {
   const handleDelete = async (carId: string) => {
     try {
       setIsLoading(true);
-      await deleteCar(carId);
+      await deleteCarRevalidate(carId);
 
       showSuccessMessage(toast, "Success", "Car deleted successfully");
 
