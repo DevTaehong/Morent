@@ -1,6 +1,6 @@
-import { Control } from 'react-hook-form';
-import { UploadFileResponse } from 'uploadthing/client';
-import mongoose from 'mongoose';
+import { Control } from "react-hook-form";
+import { UploadFileResponse } from "uploadthing/client";
+import mongoose from "mongoose";
 
 export interface ReviewData {
   _id?: string;
@@ -170,7 +170,7 @@ export interface FeedbackMessageProps {
 export interface ToastOptions {
   title: string;
   description: string;
-  variant?: 'destructive' | 'success';
+  variant?: "destructive" | "success" | "information";
 }
 
 export type ToastFunction = (options: ToastOptions) => void;
@@ -192,9 +192,9 @@ export type State = {
 };
 
 export type Action =
-  | { type: 'TOGGLE_SEED_CONFIRMATION' }
-  | { type: 'CANCEL_SEED_CONFIRMATION' }
-  | { type: 'TOGGLE_REVIEWS_SEED_CONFIRMATION' }
-  | { type: 'CANCEL_REVIEWS_SEED_CONFIRMATION' }
-  | { type: 'TOGGLE_DELETE_CONFIRMATION' }
-  | { type: 'CANCEL_DELETE_CONFIRMATION' };
+  | { type: "TOGGLE_SEED_CONFIRMATION" }
+  | { type: "CANCEL_SEED_CONFIRMATION" }
+  | { type: "TOGGLE_REVIEWS_SEED_CONFIRMATION" }
+  | { type: "CANCEL_REVIEWS_SEED_CONFIRMATION" }
+  | { type: "TOGGLE_DELETE_CONFIRMATION" }
+  | { type: "CANCEL_DELETE_CONFIRMATION" };
