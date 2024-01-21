@@ -1,11 +1,11 @@
-import { userFromDB } from '@/lib/actions/user.actions';
+import { userFromDB } from "@/lib/actions/user.actions";
 import {
   fetchCarsAddedByUser,
   fetchCarsRentedByUser,
-} from '@/lib/actions/car.actions';
-import { getAllReviewsByUser } from '@/lib/actions/review.actions';
-import { showError } from '@/lib/toastHandler';
-import { ToastFunction } from '@/lib/interfaces';
+} from "@/lib/actions/car.actions";
+import { getAllReviewsByUser } from "@/lib/actions/review.actions";
+import { showError, showInformation } from "@/lib/toastHandler";
+import { ToastFunction } from "@/lib/interfaces";
 
 export async function fetchUserData(
   userId: string,
@@ -19,9 +19,9 @@ export async function fetchUserData(
     });
     setUserData(userDataFetched);
     return userDataFetched?._id ? userDataFetched?._id?.toString() : null;
-  } catch (error) {
-    showError(toast, 'Error', 'Error fetching user data.');
-    return null;
+  } catch (error: any) {
+    showError(toast, "Error", "Error fetching user data.");
+    return error;
   }
 }
 
@@ -29,12 +29,14 @@ export async function fetchRentedCars(
   userId: string,
   setCarsRented: Function,
   toast: ToastFunction
-): Promise<void> {
+): Promise<string> {
   try {
     const rentedCars = await fetchCarsRentedByUser(userId);
     setCarsRented(JSON.stringify(rentedCars));
-  } catch (error) {
-    showError(toast, 'Error', 'Error fetching rented cars.');
+    return JSON.stringify(rentedCars);
+  } catch (error: any) {
+    showError(toast, "Error", "Error fetching rented cars.");
+    return error;
   }
 }
 
@@ -42,12 +44,14 @@ export async function fetchAddedCars(
   mongoUserId: string,
   setAddedCars: Function,
   toast: ToastFunction
-): Promise<void> {
+): Promise<string> {
   try {
     const userAddedCars = await fetchCarsAddedByUser(mongoUserId);
     setAddedCars(JSON.stringify(userAddedCars));
-  } catch (error) {
-    showError(toast, 'Error', 'Error fetching added cars.');
+    return JSON.stringify(userAddedCars);
+  } catch (error: any) {
+    showError(toast, "Error", "Error fetching added cars.");
+    return error;
   }
 }
 
@@ -55,14 +59,16 @@ export async function fetchUserReviews(
   mongoUserId: string,
   setReviews: Function,
   toast: ToastFunction
-): Promise<void> {
+): Promise<string> {
   try {
     const userReviews = await getAllReviewsByUser({
       userId: mongoUserId,
       isClientFetch: true,
     });
     setReviews(JSON.stringify(userReviews));
-  } catch (error) {
-    showError(toast, 'Error', 'Error fetching user reviews.');
+    return JSON.stringify(userReviews);
+  } catch (error: any) {
+    showInformation(toast, "Alert !", "You have not reviewed any cars yet.");
+    return error;
   }
 }
