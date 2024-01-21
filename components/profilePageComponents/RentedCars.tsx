@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import CarCard from '../carCardComponents/CarCard';
+import { useEffect, useState } from "react";
+
+import CarCard from "../carCardComponents/CarCard";
 
 interface RentedCarsProps {
   rentedCars: string;
@@ -9,7 +10,14 @@ interface RentedCarsProps {
 
 const RentedCars: React.FC<RentedCarsProps> = ({ rentedCars }) => {
   const [showMore, setShowMore] = useState(false);
-  const parsedRentedCars = rentedCars ? JSON.parse(rentedCars) : null;
+  const [parsedRentedCars, setParsedRentedCars] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (rentedCars) {
+      setParsedRentedCars(JSON.parse(rentedCars));
+    }
+  }, [rentedCars]);
+
   return (
     <>
       <div className="flex w-full justify-between">
@@ -18,13 +26,13 @@ const RentedCars: React.FC<RentedCarsProps> = ({ rentedCars }) => {
           className="mt-10 cursor-pointer font-medium text-gray400"
           onClick={() => setShowMore((prev) => !prev)}
         >
-          {showMore ? 'See Less' : 'See More'}
+          {showMore ? "See Less" : "See More"}
         </p>
       </div>
 
       <section className="mt-7 flex flex-col items-center gap-5 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {showMore // @ts-ignore
-          ? parsedRentedCars?.map((car) => (
+        {showMore && parsedRentedCars?.length > 0
+          ? parsedRentedCars.map((car) => (
               <CarCard
                 carData={car}
                 key={car._id}
@@ -34,7 +42,7 @@ const RentedCars: React.FC<RentedCarsProps> = ({ rentedCars }) => {
               />
             ))
           : parsedRentedCars
-              ?.slice(0, 4) // @ts-ignore
+              ?.slice(0, 4)
               .map((car) => (
                 <CarCard
                   carData={car}
@@ -44,6 +52,13 @@ const RentedCars: React.FC<RentedCarsProps> = ({ rentedCars }) => {
                   availabilityTo={car.availabilityTo}
                 />
               ))}
+        <div>
+          {parsedRentedCars?.length === 0 && (
+            <h3 className="p-5 font-medium text-gray400">
+              You have not rented any cars.
+            </h3>
+          )}
+        </div>
       </section>
     </>
   );
