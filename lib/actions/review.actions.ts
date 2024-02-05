@@ -1,10 +1,10 @@
-'use server';
+"use server";
 
-import { connectToDB } from '../mongoose';
-import Review from '../models/review.model';
-import { ReviewDocument } from '../interfaces';
-import Car from '../models/car.model';
-import User from '../models/user.model';
+import { connectToDB } from "../mongoose";
+import Review from "../models/review.model";
+import { ReviewDocument } from "../interfaces";
+import Car from "../models/car.model";
+import User from "../models/user.model";
 
 export async function createReview(
   reviewData: ReviewDocument
@@ -33,7 +33,7 @@ export async function deleteReview(
 
     const review = await Review.findById(reviewId);
     if (!review) {
-      throw new Error('Review not found.');
+      throw new Error("Review not found.");
     }
 
     await User.updateOne(
@@ -56,7 +56,7 @@ export async function editReview(
   reviewData: ReviewDocument
 ): Promise<ReviewDocument> {
   if (!reviewData._id) {
-    throw new Error('Review ID is required to edit.');
+    throw new Error("Review ID is required to edit.");
   }
 
   try {
@@ -76,7 +76,7 @@ export async function editReview(
     );
 
     if (!updatedReview) {
-      throw new Error('Failed to find and update the review.');
+      throw new Error("Failed to find and update the review.");
     }
 
     return updatedReview.toObject();
@@ -92,11 +92,11 @@ export async function fetchReviewById(
     connectToDB();
 
     const review = await Review.findById(reviewId)
-      .populate('userId', 'username image')
+      .populate("userId", "username image")
       .exec();
 
     if (!review) {
-      throw new Error('Review not found.');
+      throw new Error("Review not found.");
     }
 
     return review.toObject();
@@ -125,18 +125,14 @@ export async function getAllReviewsByUser({
 }: {
   userId: string | undefined;
   isClientFetch?: boolean;
-}): Promise<ReviewDocument[] | null> {
+}): Promise<ReviewDocument[] | null | undefined> {
   try {
     await connectToDB();
 
     const reviews = await Review.find({ userId })
-      .populate('carId', 'carTitle carImages')
-      .populate('userId', 'username image')
+      .populate("carId", "carTitle carImages")
+      .populate("userId", "username image")
       .exec();
-
-    if (!reviews || reviews.length === 0) {
-      throw new Error('No reviews found for the specified user.');
-    }
 
     reviews.forEach((review) => {
       if (
@@ -154,7 +150,7 @@ export async function getAllReviewsByUser({
 
     return reviews.reverse() as ReviewDocument[];
   } catch (error: any) {
-    throw new Error(`Failed to fetch reviews for the user: ${error.message}`);
+    console.error(`Failed to fetch reviews for the user: ${error}`);
   }
 }
 
@@ -172,7 +168,7 @@ export async function fetchReviewsForCar(carId: string): Promise<any[]> {
     const reviews = await Review.find({
       _id: { $in: reviewIds },
     })
-      .populate('userId', 'username image')
+      .populate("userId", "username image")
       .exec();
 
     return reviews;
