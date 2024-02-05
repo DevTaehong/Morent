@@ -64,8 +64,8 @@ const Filter = ({
             <div key={data} className="flex flex-row gap-[0.38rem]">
               <div className="flex flex-row items-center gap-[0.38rem] lg:gap-2">
                 <input
-                  className="peer h-[18px] w-[18px] appearance-none rounded-[5px] border border-gray400 
-                    bg-center bg-no-repeat checked:border-none checked:bg-[url('/svg-icons/checkBox.svg')]"
+                  className="peer size-[18px] appearance-none rounded-[5px] border border-gray400 bg-center 
+                    bg-no-repeat checked:border-none checked:bg-[url('/svg-icons/checkBox.svg')] hover:cursor-pointer"
                   id={desktopView ? `desktop-${data}` : data}
                   value={data}
                   onChange={handleFilterCheckBoxChange}
@@ -77,7 +77,7 @@ const Filter = ({
                   }
                 />
                 <Label
-                  className="text-[1rem] font-semibold not-italic leading-[1.4rem] tracking-[-0.02rem]"
+                  className="text-[1rem] font-semibold not-italic leading-[1.4rem] tracking-[-0.02rem] hover:cursor-pointer"
                   htmlFor={desktopView ? `desktop-${data}` : data}
                 >
                   {data}
@@ -92,7 +92,7 @@ const Filter = ({
       ) : (
         <>
           <Slider
-            className="max-w-[18.5rem] py-4 lg:pb-3 lg:pt-7"
+            className="max-w-[18.5rem] cursor-pointer py-4 lg:pb-3 lg:pt-7"
             id="price"
             defaultValue={[950]}
             max={999}
