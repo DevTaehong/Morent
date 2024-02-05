@@ -110,8 +110,7 @@ export async function editCarDisabledDates(
 
 export async function likeCar(
   carId: string,
-  userId: string,
-  path?: string
+  userId: string
 ): Promise<boolean | void> {
   try {
     await connectToDB();
@@ -150,7 +149,6 @@ export async function likeCar(
       if (!updateUserFavoriteCars || !updatedCar) {
         throw new Error("Failed to remove a favorite car.");
       }
-      path && revalidatePath(path);
       return true;
     } else {
       // If the user has not liked the car, add it to likes and favoriteCars
@@ -181,7 +179,6 @@ export async function likeCar(
       if (!updateUserFavoriteCars) {
         throw new Error("Failed to add a favorite car.");
       }
-      path && revalidatePath(path);
     }
   } catch (error) {
     console.error(`Failed to like car: ${error}`);
