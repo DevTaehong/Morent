@@ -9,7 +9,12 @@ export function clearLocalStorageItems() {
 }
 
 export function parseLocalStorageDate(key: string, defaultDate: Date) {
-  const storedDate = localStorage.getItem(key);
+  if (
+    typeof window === "undefined" ||
+    typeof window.localStorage === "undefined"
+  )
+    return defaultDate;
+  const storedDate = window.localStorage.getItem(key);
 
   if (storedDate && storedDate !== "undefined") {
     return new Date(JSON.parse(storedDate));
