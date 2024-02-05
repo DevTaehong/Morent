@@ -7,115 +7,75 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { calculateOrderAmount } from "@/utils/utility.functions";
 
 interface CheckoutFormProps {
-  clientSecret: string;
   price: number;
   totalDays: number;
   date: string;
   carId: string;
 }
 
-type PaymentElementOptions = {
-  layout: "tabs";
-};
-
 export default function CheckoutForm({
-  clientSecret,
   price,
   totalDays,
   date,
   carId,
 }: CheckoutFormProps) {
+  const [message, setMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
   const { userId } = useAuth();
 
-  const [message, setMessage] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (!stripe || !clientSecret) {
-      return;
-    }
-
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-      switch (paymentIntent?.status) {
-        case "succeeded":
-          setMessage("Success");
-          break;
-        case "processing":
-          setMessage("Your payment is processing.");
-          break;
-        case "requires_payment_method":
-          setMessage("Error");
-          break;
-        default:
-          setMessage("An unexpected error occurred.");
-          break;
-      }
-    });
-  }, [stripe, clientSecret]);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!stripe || !elements) {
-      setMessage("Stripe has not loaded correctly.");
-      return;
-    }
-
-    setIsLoading(true);
-
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: `https://morent-zeta.vercel.app/checkout/Success?userId=${userId}&carId=${carId}&date=${date}`,
-      },
-    });
-
-    if (error) {
-      if (error.type === "card_error" || error.type === "validation_error") {
-        setMessage(error.message || "An error occurred.");
-      } else {
-        setMessage("An unexpected error occurred.");
+    try {
+      if (!stripe || !elements) {
+        return;
       }
+
+      setIsLoading(true);
+
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: `http://localhost:3000/checkout/Success?userId=${userId}&carId=${carId}&date=${date}`,
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+    } catch (error: any) {
+      if (error) {
+        if (error.type === "card_error" || error.type === "validation_error") {
+          setMessage(error.message || "An error occurred.");
+        } else {
+          setMessage("An unexpected error occurred.");
+        }
+      }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
-  };
-
-  const paymentElementOptions: PaymentElementOptions = {
-    layout: "tabs",
   };
 
   return (
-    <div className="flex w-full items-center justify-center bg-white200 pb-10 pt-[8rem]">
-      <form id="payment-form" onSubmit={handleSubmit}>
-        <h1 className="text-base font-extrabold text-blue500">Card Details</h1>
-        <section className="py-8">
-          <LinkAuthenticationElement id="link-authentication-element" />
-          <PaymentElement
-            id="payment-element"
-            options={paymentElementOptions}
-          />
-        </section>
-        <button
-          className="w-full rounded-lg bg-blue500 py-4 text-white"
-          disabled={isLoading || !stripe || !elements}
-          id="submit"
-        >
-          <span id="button-text">
-            {isLoading
-              ? "Processing..."
-              : `Pay $${calculateOrderAmount(totalDays, price) / 100}`}
-          </span>
-        </button>
-        {message && <div id="payment-message">{message}</div>}
-      </form>
-    </div>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <LinkAuthenticationElement />
+      <PaymentElement />
+      <button
+        className={`${isLoading ? "opacity-80" : "hover-effect"} w-full rounded-lg bg-blue500 py-4 text-white`}
+        disabled={isLoading}
+        type="submit"
+      >
+        {isLoading
+          ? "Processing..."
+          : `Pay $${calculateOrderAmount(totalDays, price) / 100}`}
+      </button>
+      {message && <div id="payment-message">{message}</div>}
+    </form>
   );
 }
