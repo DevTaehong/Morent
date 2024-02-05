@@ -58,10 +58,7 @@ const ModalCarDetails: React.FC<ModalCarDetailsProps> = ({
           />
         </div>
         <div className={`flex w-full justify-between sm:mt-2`}>
-          <StarRating
-            rating={starRating || 0}
-            reviews={numberOfReviews || 100}
-          />
+          <StarRating rating={starRating || 0} reviews={numberOfReviews} />
           {canReview ? (
             <button
               className="dark:hover-effect cursor-pointer self-center rounded border border-gray300 bg-white200 px-3 py-2 font-light hover:bg-blue500 hover:text-white dark:bg-white/50"
@@ -69,13 +66,15 @@ const ModalCarDetails: React.FC<ModalCarDetailsProps> = ({
             >
               Review
             </button>
-          ) : (
+          ) : numberOfReviews ? (
             <button
               className="dark:hover-effect cursor-pointer self-center justify-self-end rounded border border-gray300 bg-white200 px-3 py-2 font-light hover:bg-blue500 hover:text-white dark:bg-white/50"
               onClick={() => setShowListOfReviews(true)}
             >
               Reviews
             </button>
+          ) : (
+            ""
           )}
         </div>
         {showReviewScreen && (

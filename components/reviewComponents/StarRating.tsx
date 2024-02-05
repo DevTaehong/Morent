@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 
 import { goldStar, emptyStar } from "../../public/svg-icons/index";
@@ -81,7 +80,7 @@ export const StarRating: React.FC<StarRatingProps> = ({ rating, reviews }) => {
       <p className="ml-2 self-center">
         {reviewCount}
         {reviews % 10 !== 0 && reviews > 9 && "+"}{" "}
-        {reviews === 1 ? "Review" : "Reviews"}
+        {reviews === 1 || reviews === 0 ? "Review" : "Reviews"}
       </p>
     </div>
   );
