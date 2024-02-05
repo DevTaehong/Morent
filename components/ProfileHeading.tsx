@@ -4,13 +4,14 @@ import Link from "next/link";
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
 
 import ReviewList from "./reviewComponents/ReviewList";
 import { profileDefaultCover } from "@/public/pngs";
 import { UploadButton } from "@/lib/uploadthing";
 import { showImageError } from "@/lib/toastHandler";
 import { useToast } from "./ui/use-toast";
-import { Loader2 } from "lucide-react";
+import { updateUser } from "@/lib/actions/user.actions";
 
 type ProfileHeadingProps = {
   userData: string;
@@ -79,8 +80,12 @@ const ProfileHeading: React.FC<ProfileHeadingProps> = ({
               ut-button:rounded ut-button:bg-white/40 ut-button:py-1.5 ut-button:text-[10px] ut-button:text-white
               ut-button:sm:h-10 ut-button:sm:w-[6.56rem] ut-button:sm:text-sm ut-button:md:bottom-6 ut-button:md:right-14 ut-button:md:rounded-md ut-button:md:py-3"
             endpoint="media"
-            onClientUploadComplete={(res) => {
+            onClientUploadComplete={async (res) => {
               setCover(res && res[0]?.url);
+              await updateUser({
+                ...parsedUserData,
+                coverImage: res && res[0]?.url,
+              });
             }}
             onUploadError={(error: Error) => {
               console.error(error);
