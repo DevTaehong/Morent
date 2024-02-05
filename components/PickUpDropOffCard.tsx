@@ -52,11 +52,16 @@ const PickUpDropOffCard = () => {
   const handleSelectedDate = (selectedDate: DateRange | undefined) => {
     setDate(selectedDate);
     // to save the date in local storage and use it when the user refreshes the page
-    localStorage.setItem(
-      "availabilityFrom",
-      JSON.stringify(selectedDate?.from)
-    );
-    localStorage.setItem("availabilityTo", JSON.stringify(selectedDate?.to));
+    if (typeof window !== "undefined" && window.localStorage) {
+      window.localStorage.setItem(
+        "availabilityFrom",
+        JSON.stringify(selectedDate?.from)
+      );
+      window.localStorage.setItem(
+        "availabilityTo",
+        JSON.stringify(selectedDate?.to)
+      );
+    }
   };
 
   const isSearchPage = pathname === "/search";
@@ -79,14 +84,18 @@ const PickUpDropOffCard = () => {
           {/* Location */}
           <div className={`flex flex-col gap-3 xl:grow ${searchPageLocation}`}>
             <div className="flex flex-row items-center gap-2">
-              <div className="flex h-[17px] w-[17px] items-center justify-center rounded-[4.375rem] bg-blue450">
+              <div className="flex size-[16px] items-center justify-center rounded-[4.375rem] bg-blue450">
                 <Image src={ellipse} width={8} height={8} alt="Ellipse" />
               </div>
               <Label htmlFor="location">Location</Label>
             </div>
             <Location
               onUserInput={handleUserInput}
-              searchLocation={localStorage.getItem("location")}
+              searchLocation={
+                typeof window !== "undefined" && window.localStorage
+                  ? window.localStorage.getItem("location")
+                  : undefined
+              }
             />
           </div>
           <AvailabilityFromTo
@@ -98,7 +107,7 @@ const PickUpDropOffCard = () => {
       </Card>
       {/* Search Button on homepage */}
       <Button
-        className={`${searchPageButton} rounded-[0.625rem] bg-blue500 xl:mt-[3.26rem]`}
+        className={`${searchPageButton} hover-effect rounded-[0.625rem] bg-blue500 xl:mt-[3.26rem]`}
         onClick={handleSearch}
       >
         <Image src={search} width={14} height={14} alt="Search" />
@@ -111,7 +120,7 @@ const PickUpDropOffCard = () => {
         <Button
           className={`${
             isSearchPage ? "xl:hidden" : "xl:max-w-[10rem]"
-          } flex h-12 grow flex-row gap-[0.38rem] rounded-[0.625rem] bg-blue500 xl:mt-[3.26rem] xl:h-14`}
+          } hover-effect flex h-12 grow flex-row gap-[0.38rem] rounded-[0.625rem] bg-blue500 xl:mt-[3.26rem] xl:h-14`}
           onClick={handleSearch}
         >
           <Image src={search} width={14} height={14} alt="Search" />
