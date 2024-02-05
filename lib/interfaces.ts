@@ -96,9 +96,9 @@ interface CarRentedParams {
 export interface UserParams {
   id: string;
   _id?: mongoose.Types.ObjectId;
-  username: string;
+  username?: string;
   email?: string;
-  name: string;
+  name?: string;
   image?: string;
   coverImage?: string;
   bio?: string;
@@ -106,6 +106,7 @@ export interface UserParams {
   path?: string;
   carsAdded?: CarAddedParams[];
   carsRented?: CarRentedParams[];
+  favoriteCars?: mongoose.Types.ObjectId[];
 }
 
 export type EditUserFormFields = {
@@ -129,6 +130,7 @@ export interface SelectInputProps {
   label: string;
   placeholder: string;
   items: SelectItems[];
+  errorMessage: string;
 }
 export interface InputControllerProps {
   control: Control<FormData>;
@@ -162,7 +164,6 @@ export type UploadFunction = (
 ) => Promise<UploadFileResponse[] | undefined>;
 
 export interface FeedbackMessageProps {
-  isLoading: boolean;
   error?: string | null;
   success?: boolean;
 }
