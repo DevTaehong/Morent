@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
-import { loaderCityscape, advertWhiteCar } from "@/public/pngs";
 import { motion } from "framer-motion";
+
+import { loaderCityscape, advertWhiteCar } from "@/public/pngs";
 
 const Loader = () => {
   return (
