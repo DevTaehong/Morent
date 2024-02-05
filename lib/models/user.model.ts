@@ -54,7 +54,14 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    favoriteCars: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Car",
+      },
+    ],
   },
+
   {
     timestamps: true,
   }
