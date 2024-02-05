@@ -7,6 +7,8 @@ import {
   darkModeHome,
 } from '@/public/svg-icons';
 
+export const MY_URL = 'https://morent-zeta.vercel.app/'
+
 export const footerLinks = [
   {
     title: 'About',
@@ -98,10 +100,10 @@ export const carTypes = [
 ];
 
 export const capacities = [
-  { value: '2', label: '2 Person' },
-  { value: '4', label: '4 Person' },
-  { value: '6', label: '6 Person' },
-  { value: '8', label: '8 or more' },
+  { value: '2 Persons', label: '2 Persons' },
+  { value: '4 Persons', label: '4 Persons' },
+  { value: '6 Persons', label: '6 Persons' },
+  { value: '8 or more', label: '8 or more' },
 ];
 
 export const transmissionOptions = [
@@ -128,9 +130,9 @@ export const typeFilters = [
 ];
 
 export const capacityFilters = [
-  "2 Person",
-  "4 Person",
-  "6 Person",
+  "2 Persons",
+  "4 Persons",
+  "6 Persons",
   "8 or More",
 ];
 
