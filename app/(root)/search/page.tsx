@@ -17,7 +17,7 @@ const SearchPage = async ({
   const cars = JSON.parse(JSON.stringify(carData));
 
   return (
-    <div className="flex flex-col pt-[5.75rem] lg:flex-row">
+    <div className="flex flex-col pt-[5.75rem] lg:flex-row min-[1440px]:mx-auto min-[1440px]:max-w-[82.5rem]">
       <SearchWithFiltering />
       <div className="flex grow flex-col bg-white200 px-6 pb-[3.75rem] pt-6 dark:bg-gray950 sm:pb-0">
         <PickUpDropOffCard />
