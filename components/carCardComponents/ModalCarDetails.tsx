@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import Image from 'next/image';
+import React, { useState } from "react";
+import Image from "next/image";
+import { MapPin } from "lucide-react";
 
-import StarRating from '../reviewComponents/StarRating';
-import { cross, whiteCross } from '@/public/svg-icons';
-import { CarParamsExtended, ReviewData } from '@/lib/interfaces';
-import ReviewForm from '../reviewComponents/ReviewForm';
+import StarRating from "../reviewComponents/StarRating";
+import { cross, whiteCross } from "@/public/svg-icons";
+import { CarParamsExtended, ReviewData } from "@/lib/interfaces";
+import ReviewForm from "../reviewComponents/ReviewForm";
 
 interface ModalCarDetailsProps {
   carData: CarParamsExtended;
@@ -38,7 +39,9 @@ const ModalCarDetails: React.FC<ModalCarDetailsProps> = ({
   const numberOfReviews = carData?.reviews.length;
   const starRating = findAverageRating(carData?.reviews);
   const [showReviewScreen, setShowReviewScreen] = useState(false);
-  const availabilityColor = carAvailability ? 'bg-blue500' : 'bg-blue100';
+  const availabilityColor = carAvailability
+    ? "bg-blue500"
+    : "bg-blue100 dark:text-gray400 dark:bg-gray800";
 
   return (
     <div className="mt-8 flex flex-col px-2 md:w-full lg:ml-10 lg:mt-0 lg:justify-between lg:p-6">
@@ -46,7 +49,7 @@ const ModalCarDetails: React.FC<ModalCarDetailsProps> = ({
         <div className="flex justify-between">
           <p className="text-xl font-medium lg:text-3xl">{carData.carTitle}</p>
           <Image
-            src={theme === 'light' ? cross : whiteCross}
+            src={theme === "light" ? cross : whiteCross}
             height={34}
             width={34}
             alt="close modal"
@@ -61,14 +64,14 @@ const ModalCarDetails: React.FC<ModalCarDetailsProps> = ({
           />
           {canReview ? (
             <button
-              className="cursor-pointer self-center rounded border border-gray300 bg-white200 px-3 py-2 font-light hover:bg-blue500 hover:text-white dark:bg-white/50"
+              className="dark:hover-effect cursor-pointer self-center rounded border border-gray300 bg-white200 px-3 py-2 font-light hover:bg-blue500 hover:text-white dark:bg-white/50"
               onClick={() => setShowReviewScreen(true)}
             >
               Review
             </button>
           ) : (
             <button
-              className="cursor-pointer self-center justify-self-end rounded border border-gray300 bg-white200 px-3 py-2 font-light hover:bg-blue500 hover:text-white dark:bg-white/50"
+              className="dark:hover-effect cursor-pointer self-center justify-self-end rounded border border-gray300 bg-white200 px-3 py-2 font-light hover:bg-blue500 hover:text-white dark:bg-white/50"
               onClick={() => setShowListOfReviews(true)}
             >
               Reviews
@@ -82,12 +85,16 @@ const ModalCarDetails: React.FC<ModalCarDetailsProps> = ({
           />
         )}
       </div>
+      <div className="mt-2 flex items-center gap-2 text-lg font-light lg:text-xl">
+        <MapPin />
+        {carData.location}
+      </div>
       <p className="mt-2 text-xs font-light leading-6 text-gray700 dark:text-white200 lg:text-lg lg:leading-10">
         {carData.shortDescription}
       </p>
-      <div>
-        <div className="mt-4 flex justify-between gap-8">
-          <div className="flex w-1/2 justify-between">
+      <div className="sm:w-[26rem]">
+        <div className="mt-4 flex justify-between gap-8 ">
+          <div className="flex w-full justify-between">
             <p className="text-xs text-gray400 sm:text-lg lg:text-xl">
               Type Car
             </p>
@@ -95,17 +102,19 @@ const ModalCarDetails: React.FC<ModalCarDetailsProps> = ({
               {carData.carType}
             </p>
           </div>
-          <div className="flex w-1/2 justify-between">
+          <div className="flex w-full justify-between">
             <p className="text-xs text-gray400 sm:text-lg lg:text-xl">
               Capacity
             </p>
             <p className="text-right text-xs text-gray700 dark:text-white200 sm:text-lg lg:text-xl">
-              {carData.capacity}
+              {carData.capacity !== "8 or More"
+                ? carData.capacity + "s"
+                : carData.capacity}
             </p>
           </div>
         </div>
         <div className="mt-4 flex justify-between gap-8">
-          <div className="flex w-1/2 justify-between">
+          <div className="flex w-full justify-between">
             <p className="text-xs text-gray400 sm:text-lg lg:text-xl">
               Transm.
             </p>
@@ -113,7 +122,7 @@ const ModalCarDetails: React.FC<ModalCarDetailsProps> = ({
               {carData.transmission}
             </p>
           </div>
-          <div className="flex w-1/2 justify-between">
+          <div className="flex w-full justify-between">
             <p className="text-xs text-gray400 sm:text-lg lg:text-xl">
               Gasoline
             </p>
@@ -129,15 +138,15 @@ const ModalCarDetails: React.FC<ModalCarDetailsProps> = ({
           <span className="text-xs text-gray-400 sm:text-base"> day</span>
         </p>
         <button
-          className={`${availabilityColor} rounded px-6 py-2 font-medium text-white`}
+          className={`${availabilityColor} hover-effect h-14 rounded-[0.625rem] px-6 py-2 font-medium text-white`}
           onClick={handleButtonClick}
           disabled={!carAvailability}
         >
           {!carAvailability
-            ? 'Unavailable'
+            ? "Unavailable"
             : canReview
-            ? 'Rent Again'
-            : 'Rent Now'}
+              ? "Rent Again"
+              : "Rent Now"}
         </button>
       </div>
     </div>

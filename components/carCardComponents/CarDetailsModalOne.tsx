@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { useTheme } from 'next-themes';
-import { usePathname } from 'next/navigation';
+import React, { useState } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
 
-import { cross, whiteCross } from '../../public/svg-icons/index';
-import CarDetailsModalTwo from './CarDetailsModalTwo';
-import ReviewList from '../reviewComponents/ReviewList';
-import ModalImageGallery from './ModalImageGallery';
-import ModalCarDetails from './ModalCarDetails';
-import { CarParamsExtended } from '@/lib/interfaces';
+import { cross, whiteCross } from "../../public/svg-icons/index";
+import CarDetailsModalTwo from "./CarDetailsModalTwo";
+import ReviewList from "../reviewComponents/ReviewList";
+import ModalImageGallery from "./ModalImageGallery";
+import ModalCarDetails from "./ModalCarDetails";
+import { CarParamsExtended } from "@/lib/interfaces";
 
 interface CarDetailsModalOneProps {
   carData: CarParamsExtended;
@@ -30,11 +30,8 @@ const CarDetailsModalOne: React.FC<CarDetailsModalOneProps> = ({
 }) => {
   const pathname = usePathname();
   const { theme } = useTheme();
-  const [displayPicture, setDisplayPicture] = useState(
-    carData?.carImages && carData.carImages[0]
-  );
+  const [displayPicture, setDisplayPicture] = useState(0);
   const [showModalScreen2, setShowModalScreen2] = useState(false);
-  const [changePicture, setChangePicture] = useState(true);
   const [motionKey, setMotionKey] = useState(0);
   const [showListOfReviews, setShowListOfReviews] = useState(false);
   const [closeModal, setCloseModal] = useState(false);
@@ -57,15 +54,15 @@ const CarDetailsModalOne: React.FC<CarDetailsModalOneProps> = ({
         key={motionKey}
         animate={{ scale: closeModal ? 0 : 1 }}
         initial={{ scale: 0 }}
-        className={`fixed inset-x-2 top-[12.75rem] ${
-          showListOfReviews ? 'z-40' : 'z-50'
-        } flex flex-col rounded-lg bg-white p-4 dark:bg-gray850 xs:inset-x-auto  sm:flex-row 
+        className={`fixed inset-x-2 top-28 lg:top-[12.75rem] ${
+          showListOfReviews ? "z-40" : "z-50"
+        } flex flex-col rounded-lg bg-white p-4 dark:bg-gray850 xs:inset-x-auto sm:flex-row 
         ${
           !showModalScreen2
-            ? 'max-w-[30rem] lg:max-w-[65.9rem]'
-            : 'h-auto max-w-[31.25rem]'
-        } ${!isPopular && 'xs:-mr-14 sm:mr-0'}
-        ${pathname === '/search' && 'xs:ml-3 xs:mr-1 sm:mr-4 lg:ml-6'}
+            ? "max-w-[30rem] lg:max-w-[65.9rem]"
+            : "h-auto max-w-[31.25rem]"
+        } ${!isPopular && "xs:-mr-14 sm:mr-0"}
+        ${pathname === "/search" && "xs:ml-3 xs:mr-1 sm:mr-4 lg:ml-6"}
         `}
       >
         {showModalScreen2 && (
@@ -76,12 +73,12 @@ const CarDetailsModalOne: React.FC<CarDetailsModalOneProps> = ({
         )}
         <div
           className={`flex flex-col lg:flex-row ${
-            showModalScreen2 && 'hidden'
+            showModalScreen2 && "hidden"
           }`}
         >
           <div className="absolute -top-4 right-2 rounded-sm bg-white dark:bg-gray850">
             <Image
-              src={theme === 'light' ? cross : whiteCross}
+              src={theme === "light" ? cross : whiteCross}
               height={20}
               width={20}
               alt="close modal"
@@ -90,10 +87,8 @@ const CarDetailsModalOne: React.FC<CarDetailsModalOneProps> = ({
             />
           </div>
           <ModalImageGallery
-            changePicture={changePicture}
             carData={carData}
             displayPicture={displayPicture}
-            setChangePicture={setChangePicture}
             setDisplayPicture={setDisplayPicture}
           />
           <ModalCarDetails
@@ -108,7 +103,7 @@ const CarDetailsModalOne: React.FC<CarDetailsModalOneProps> = ({
         </div>
       </motion.div>
       <div
-        className="fixed inset-0 z-40 h-full w-full bg-black opacity-50 dark:bg-gray900 dark:opacity-70"
+        className="fixed inset-0 z-40 size-full bg-black opacity-50 dark:bg-gray900 dark:opacity-70"
         onClick={handleCloseClick}
       ></div>
       {showListOfReviews && (

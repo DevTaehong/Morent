@@ -9,6 +9,8 @@ interface AdvertProps {
   imageSrc: string;
   additionalStyles: string;
   whiteCar: boolean;
+  width: number;
+  height: number;
 }
 
 const Advert: React.FC<AdvertProps> = ({
@@ -17,6 +19,8 @@ const Advert: React.FC<AdvertProps> = ({
   imageSrc,
   additionalStyles,
   whiteCar,
+  width,
+  height,
 }) => {
   const [driveAway, setDriveAway] = useState(false);
 
@@ -31,7 +35,9 @@ const Advert: React.FC<AdvertProps> = ({
       onClick={handleClick}
     >
       <div className="flex flex-col">
-        <p className="w-full text-white sm:text-3xl lg:w-1/2">{title}</p>
+        <p className="w-full text-white sm:text-[2rem] sm:font-semibold sm:leading-[2.4rem] lg:w-1/2">
+          {title}
+        </p>
         <p className="mt-4 w-full text-xs text-white sm:text-base lg:w-1/2">
           {description}
         </p>
@@ -45,9 +51,9 @@ const Advert: React.FC<AdvertProps> = ({
             <ul
               className={`${!driveAway && "hidden"} z-10 ${
                 whiteCar
-                  ? "translate-x-12 translate-y-3 sm:translate-x-16"
-                  : "translate-x-7 translate-y-2"
-              }`}
+                  ? "translate-y-3 sm:translate-x-[4.2rem]"
+                  : "translate-y-2"
+              } translate-x-12 `}
             >
               {[0, 1, 2, 3, 4, 5, 6, 7].map((listItem) => (
                 <li className="smoke_list" key={listItem}></li>
@@ -57,8 +63,8 @@ const Advert: React.FC<AdvertProps> = ({
           <Image
             src={imageSrc}
             alt="car-picture-for-advert"
-            width={192}
-            height={56}
+            width={width}
+            height={height}
             className="z-20 ml-0 h-[4.2rem] w-[14rem] self-center xs:h-[5rem] xs:w-[18rem] sm:ml-6 sm:h-[7.25rem] sm:w-[25.5rem]"
           />
         </div>
