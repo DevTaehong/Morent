@@ -55,6 +55,7 @@
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.45.4",
+    "sharp": "^0.33.2",
     "stripe": "^13.2.0",
     "svix": "^1.8.1",
     "tailwind-merge": "^1.14.0",
