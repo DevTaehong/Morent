@@ -20,7 +20,6 @@ interface CarCardProps {
   availabilityTo: Date;
   hasLiked: boolean | undefined;
   onUnlink?: (carId: string) => void;
-  path?: string;
 }
 
 const CarCard: React.FC<CarCardProps> = ({
@@ -32,7 +31,6 @@ const CarCard: React.FC<CarCardProps> = ({
   availabilityTo,
   hasLiked,
   onUnlink,
-  path,
 }) => {
   const { userId } = useAuth();
   const pathname = usePathname();
@@ -43,7 +41,7 @@ const CarCard: React.FC<CarCardProps> = ({
 
   const handleButtonClick = async () => {
     setIsFavourited((prev) => !prev);
-    const isUnlink = await likeCar(carData._id || "", userId || "", path);
+    const isUnlink = await likeCar(carData._id || "", userId || "");
     if (onUnlink && isUnlink) {
       onUnlink(carData._id || "");
     }
