@@ -1,10 +1,10 @@
-import { userFromDB } from "@/lib/actions/user.actions";
+import { userFromDB, getFavoriteCars } from "@/lib/actions/user.actions";
 import {
   fetchCarsAddedByUser,
   fetchCarsRentedByUser,
 } from "@/lib/actions/car.actions";
 import { getAllReviewsByUser } from "@/lib/actions/review.actions";
-import { showError, showInformation } from "@/lib/toastHandler";
+import { showError } from "@/lib/toastHandler";
 import { ToastFunction } from "@/lib/interfaces";
 
 export async function fetchUserData(
@@ -14,7 +14,7 @@ export async function fetchUserData(
 ): Promise<string | null> {
   try {
     const userDataFetched = await userFromDB({
-      userName: userId,
+      userClerkId: userId,
       isClientFetch: true,
     });
     setUserData(userDataFetched);
@@ -40,6 +40,21 @@ export async function fetchRentedCars(
   }
 }
 
+export async function fetchFavoriteCars(
+  userId: string,
+  setFavoriteCars: Function
+): Promise<string | undefined> {
+  try {
+    const favoriteCars = await getFavoriteCars(userId);
+
+    setFavoriteCars(JSON.stringify(favoriteCars));
+
+    return JSON.stringify(favoriteCars);
+  } catch (error: any) {
+    console.error(`Error fetching favorite cars: ${error}`);
+  }
+}
+
 export async function fetchAddedCars(
   mongoUserId: string,
   setAddedCars: Function,
@@ -57,9 +72,8 @@ export async function fetchAddedCars(
 
 export async function fetchUserReviews(
   mongoUserId: string,
-  setReviews: Function,
-  toast: ToastFunction
-): Promise<string> {
+  setReviews: Function
+): Promise<string | undefined> {
   try {
     const userReviews = await getAllReviewsByUser({
       userId: mongoUserId,
@@ -67,8 +81,7 @@ export async function fetchUserReviews(
     });
     setReviews(JSON.stringify(userReviews));
     return JSON.stringify(userReviews);
-  } catch (error: any) {
-    showInformation(toast, "Alert !", "You have not reviewed any cars yet.");
-    return error;
+  } catch (error) {
+    console.error("Error fetching user reviews", error);
   }
 }
