@@ -93,7 +93,7 @@ const MobileNavBar: FC<MobileNavBarProps> = ({
             href={
               userId
                 ? "/profile"
-                : "/sign-in?redirect_url=http://localhost:3000/"
+                : "/sign-in?redirect_url=https://morent-zeta.vercel.app/"
             }
             className="mt-5 rounded"
           >

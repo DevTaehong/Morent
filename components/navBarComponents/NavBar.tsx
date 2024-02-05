@@ -72,7 +72,7 @@ const NavBar = () => {
                 <UserButton afterSignOutUrl="/" />
               </div>
             ) : (
-              <Link href="/sign-in?redirect_url=http://localhost:3000/">
+              <Link href="/sign-in?redirect_url=https://morent-zeta.vercel.app/">
                 <button className="hover-effect hidden h-[2.75rem] w-[6.8rem] items-center justify-center rounded bg-blue500 font-semibold text-white md:flex">
                   Login
                 </button>
