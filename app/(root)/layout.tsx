@@ -8,6 +8,7 @@ import Provider from "../providers/Provider";
 import NavBar from "@/components/navBarComponents/NavBar";
 import Footer from "@/components/Footer";
 import { Toaster } from "@/components/ui/toaster";
+import { MY_URL } from "@/constants";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -17,8 +18,23 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(MY_URL),
   title: "Morent",
   description: "The best platform for car rental",
+  openGraph: {
+    title: "Morent",
+    description: "The best platform for car rental",
+    url: MY_URL,
+    siteName: "Morent",
+    images: [
+      {
+        url: "/metadata_image.png",
+        width: 1200,
+        height: 630,
+        alt: "Morent - Discover, Reserve, and Rent a Car with Morent Effortlessly",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
