@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Types } from "mongoose";
 
 import useFilterStore from "@/lib/store";
 import CarCard from "@/components/carCardComponents/CarCard";
@@ -12,10 +13,12 @@ const FetchCarCard = ({
   cars,
   availabilityFrom,
   availabilityTo,
+  userObjId,
 }: {
   cars: CarParamsExtended[] | null;
   availabilityFrom: Date;
   availabilityTo: Date;
+  userObjId: Types.ObjectId | undefined;
 }) => {
   const [
     search,
@@ -91,6 +94,9 @@ const FetchCarCard = ({
                 carData={car}
                 availabilityFrom={availabilityFrom}
                 availabilityTo={availabilityTo}
+                hasLiked={car.likes?.some(
+                  (like: Types.ObjectId) => like === userObjId
+                )}
               />
             ))}
       </div>
@@ -101,6 +107,7 @@ const FetchCarCard = ({
           availabilityTo={availabilityTo}
           filteredCars={filteredCars}
           carNumbers={filteredCars?.length}
+          userObjId={userObjId}
         />
       ) : (
         filteredCars?.length === 0 && (

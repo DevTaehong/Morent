@@ -1,32 +1,35 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/components/ui/collapsible';
-import { Button } from '@/components/ui/button';
-import CarCard from '@/components/carCardComponents/CarCard';
-import { CarParamsExtended } from '@/lib/interfaces';
+} from "@/components/ui/collapsible";
+import { Button } from "@/components/ui/button";
+import CarCard from "@/components/carCardComponents/CarCard";
+import { CarParamsExtended } from "@/lib/interfaces";
+import { Types } from "mongoose";
 
 const ShowMoreCars = ({
   filteredCars,
   carNumbers,
   availabilityTo,
   availabilityFrom,
+  userObjId,
 }: {
   filteredCars: CarParamsExtended[];
   carNumbers: number;
   availabilityTo: Date;
   availabilityFrom: Date;
+  userObjId: Types.ObjectId | undefined;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
-  const isClickedHideButton = isClicked && 'hidden';
-  const isClickedAddMarginBottom = isClicked && 'md:mb-8';
+  const isClickedHideButton = isClicked && "hidden";
+  const isClickedAddMarginBottom = isClicked && "md:mb-8";
 
   return (
     <Collapsible
@@ -47,6 +50,7 @@ const ShowMoreCars = ({
                 carData={car}
                 availabilityFrom={availabilityFrom}
                 availabilityTo={availabilityTo}
+                hasLiked={car.likes?.some((like) => like === userObjId)}
               />
             ))}
       </CollapsibleContent>
