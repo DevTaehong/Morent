@@ -8,5 +8,13 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["camelcase", "GEOAPIFY", "Geocode", "Morent"]
+  "cSpell.words": [
+    "camelcase",
+    "evnt",
+    "GEOAPIFY",
+    "Geocode",
+    "Morent",
+    "pngs",
+    "svix"
+  ]
 }
