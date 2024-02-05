@@ -1,6 +1,8 @@
+import { NextRequest, NextResponse } from "next/server";
+
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const paymentIntentId = searchParams.get("paymentIntentId");
   const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
@@ -11,7 +13,7 @@ export async function GET(req: Request) {
 
   const receiptUrl = latestCharge.receipt_url;
 
-  return Response.json({
+  return NextResponse.json({
     receiptUrl,
   });
 }
