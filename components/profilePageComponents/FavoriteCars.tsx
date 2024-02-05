@@ -46,7 +46,7 @@ const FavoriteCars = ({ favoriteCars, userObjId }: FavoriteCarsProps) => {
               <CarCard
                 carData={car}
                 key={car._id}
-                canReview={true}
+                canReview={false}
                 availabilityFrom={car.availabilityFrom}
                 availabilityTo={car.availabilityTo}
                 hasLiked={car.likes?.some(
@@ -61,7 +61,7 @@ const FavoriteCars = ({ favoriteCars, userObjId }: FavoriteCarsProps) => {
                 <CarCard
                   carData={car}
                   key={car._id}
-                  canReview={true}
+                  canReview={false}
                   availabilityFrom={car.availabilityFrom}
                   availabilityTo={car.availabilityTo}
                   hasLiked={car.likes?.some(
