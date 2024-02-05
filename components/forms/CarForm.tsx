@@ -150,9 +150,9 @@ const CarForm: React.FC<CarFormProps> = ({ userId, car }) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex w-full max-w-4xl flex-col items-center gap-5 rounded-xl bg-white px-6 py-12 dark:bg-gray850"
+        className="flex w-full max-w-4xl flex-col items-center gap-5 rounded-xl bg-white p-6 dark:bg-gray850"
       >
-        <FormState isLoading={isLoading} error={error} success={success} />
+        <FormState error={error} success={success} />
 
         <CarFormHeader pathname={pathname} car={car} />
 
@@ -169,6 +169,7 @@ const CarForm: React.FC<CarFormProps> = ({ userId, car }) => {
             label="Car Type"
             placeholder="Car Type"
             items={carTypes}
+            errorMessage="Car type is required!"
           />
         </div>
         <div className="flex w-full flex-col gap-8 md:flex-row">
@@ -186,6 +187,7 @@ const CarForm: React.FC<CarFormProps> = ({ userId, car }) => {
             label="Capacity"
             placeholder="Capacity in persons"
             items={capacities}
+            errorMessage="Car capacity is required!"
           />
         </div>
 
@@ -196,12 +198,13 @@ const CarForm: React.FC<CarFormProps> = ({ userId, car }) => {
             label="Transmission"
             placeholder="Transmission Type"
             items={transmissionOptions}
+            errorMessage="Car Transmission is required!"
           />
 
           <FormItem className="relative flex w-full flex-col justify-start">
             <FormLabel>Location</FormLabel>
             <FormControl className="w-full">
-              <div className="absolute  top-[12px]  z-10 w-full">
+              <div className="absolute top-[12px] z-10 w-full">
                 <Location
                   handleLocationSelected={(location: string) =>
                     handleLocationSelected(location, form)
@@ -218,6 +221,7 @@ const CarForm: React.FC<CarFormProps> = ({ userId, car }) => {
             label="Fuel Capacity"
             placeholder="Fuel Capacity"
             items={fuelCapacityOptions}
+            errorMessage="Car fuel capacity is required!"
           />
           <InputController
             control={form.control}
