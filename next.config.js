@@ -1,19 +1,20 @@
-/** @type {import('next').NextConfig} */
+/** @type {import("next").NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverActions: true,
-    serverComponentsExternalPackages: ["mongoose"],
-  },
   images: {
-    domains: ["images.clerk.dev", 'loremflickr.com'],
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "img.clerk.com",
+        protocol: 'https',
+        hostname: '**',
       },
-      { protocol: "https", hostname: "uploadthing.com" },
     ],
   },
+
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '9mb',
+    },
+  },
+
 };
 
 module.exports = nextConfig;
