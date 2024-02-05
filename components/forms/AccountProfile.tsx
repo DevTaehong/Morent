@@ -1,10 +1,11 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useTransition } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname, useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 import {
   Form,
@@ -12,6 +13,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { EditUserFormFieldsValidation } from "@/lib/validations/user";
 import { Button } from "@/components/ui/button";
@@ -28,6 +30,7 @@ interface Props {
 }
 
 const AccountProfile: React.FC<Props> = ({ user }) => {
+  const [isPending, startTransition] = useTransition();
   const [files, setFiles] = useState<File[]>([]);
   const { startUpload } = useUploadThing("media");
 
@@ -39,7 +42,6 @@ const AccountProfile: React.FC<Props> = ({ user }) => {
   const form = useForm<EditUserFormFields>({
     resolver: zodResolver(EditUserFormFieldsValidation),
     defaultValues: {
-      name: userData?.name || "",
       username: userData?.username || "",
       bio: userData?.bio || "",
       image: userData?.image || "",
@@ -48,30 +50,31 @@ const AccountProfile: React.FC<Props> = ({ user }) => {
   });
 
   const onSubmit = async (values: EditUserFormFields) => {
-    const blob = values.image;
-    const hasImageChanged = isBase64Image(blob);
+    startTransition(async () => {
+      const blob = values.image;
+      const hasImageChanged = isBase64Image(blob);
 
-    if (hasImageChanged) {
-      const imgRes = await startUpload(files);
-      if (imgRes && imgRes[0].url) {
-        values.image = imgRes[0].url;
+      if (hasImageChanged) {
+        const imgRes = await startUpload(files);
+        if (imgRes && imgRes[0].url) {
+          values.image = imgRes[0].url;
+        }
       }
-    }
 
-    await updateUser({
-      ...userData,
-      username: values.username,
-      name: values.name,
-      bio: values.bio || "",
-      image: values.image,
-      path: pathname,
+      await updateUser({
+        ...userData,
+        username: values.username,
+        bio: values.bio || "",
+        image: values.image,
+        path: pathname,
+      });
+
+      if (pathname === "/profile/edit") {
+        router.back();
+      } else {
+        router.push("/");
+      }
     });
-
-    if (pathname === "/profile/edit") {
-      router.back();
-    } else {
-      router.push("/");
-    }
   };
 
   const handleImage = (
@@ -108,7 +111,7 @@ const AccountProfile: React.FC<Props> = ({ user }) => {
             <FormItem className="flex flex-col justify-start">
               <FormLabel className="ml-1 p-4 pl-0">
                 {field.value ? (
-                  <div className="flex h-24 w-24">
+                  <div className="flex size-24">
                     <ImageWithFallback
                       src={field.value}
                       alt="profile photo"
@@ -122,9 +125,9 @@ const AccountProfile: React.FC<Props> = ({ user }) => {
                   <Image
                     src="/profile.svg"
                     alt="profile photo"
-                    width={24}
-                    height={24}
-                    className=" object-contain"
+                    width={96}
+                    height={96}
+                    className="object-contain"
                   />
                 )}
               </FormLabel>
@@ -133,7 +136,7 @@ const AccountProfile: React.FC<Props> = ({ user }) => {
                   type="file"
                   accept="image/*"
                   placeholder="Upload an Image"
-                  className=""
+                  className="cursor-pointer"
                   onChange={(e) => handleImage(e, field.onChange)}
                 />
               </FormControl>
@@ -143,18 +146,6 @@ const AccountProfile: React.FC<Props> = ({ user }) => {
 
         <FormField
           control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem className="flex flex-col justify-start">
-              <FormLabel className="ml-1 pl-0 text-lg">Name</FormLabel>
-              <FormControl className="bg-white200 dark:bg-gray800">
-                <Input type="text" className="" {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="username"
           render={({ field }) => (
             <FormItem className="flex flex-col justify-start">
@@ -162,6 +153,7 @@ const AccountProfile: React.FC<Props> = ({ user }) => {
               <FormControl className="bg-white200 dark:bg-gray800">
                 <Input type="text" className="" {...field} />
               </FormControl>
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
@@ -172,13 +164,22 @@ const AccountProfile: React.FC<Props> = ({ user }) => {
             <FormItem className="flex flex-col justify-start">
               <FormLabel className="ml-1 pl-0 text-lg">Bio</FormLabel>
               <FormControl className="bg-white200 dark:bg-gray800">
-                <Textarea rows={10} className="" {...field} />
+                <Textarea rows={10} className="rounded-[0.625rem]" {...field} />
               </FormControl>
+              <FormMessage className="text-red-500" />
             </FormItem>
           )}
         />
-        <Button className="mt-4 bg-blue500 text-white" type="submit">
-          Submit
+        <Button
+          disabled={isPending}
+          className="hover-effect mt-4 bg-blue500 text-white"
+          type="submit"
+        >
+          {isPending ? (
+            <Loader2 className="mr-2 size-4 animate-spin" />
+          ) : (
+            "Submit"
+          )}
         </Button>
       </form>
     </Form>
