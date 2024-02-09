@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import * as z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useState, useEffect } from "react";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import Image from 'next/image';
-import { useTheme } from 'next-themes';
-import { motion } from 'framer-motion';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import Image from "next/image";
+import { useTheme } from "next-themes";
+import { motion } from "framer-motion";
 
-import ReviewFormStarRating from './ReviewFormStarRating';
-import { cross, whiteCross } from '@/public/svg-icons';
-import { createReview, editReview } from '@/lib/actions/review.actions';
-import { advertSilverCar } from '@/public/pngs';
+import ReviewFormStarRating from "./ReviewFormStarRating";
+import { cross, whiteCross } from "@/public/svg-icons";
+import { createReview, editReview } from "@/lib/actions/review.actions";
+import { advertSilverCar } from "@/public/pngs";
 
 interface ReviewFormProps {
   setShowReviewScreen: (value: boolean) => void;
@@ -40,7 +40,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 
   useEffect(() => {
     if (reloadPage) {
-      window.location.href = '/profile';
+      window.location.href = "/profile";
     }
   }, [reloadPage]);
 
@@ -60,14 +60,14 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   const formSchema = z.object({
     review: z
       .string()
-      .min(10, 'Review must be at least 10 characters.')
-      .max(300, 'Review must be at most 300 characters.'),
+      .min(10, "Review must be at least 10 characters.")
+      .max(300, "Review must be at most 300 characters."),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      review: '',
+      review: "",
     },
   });
 
@@ -119,7 +119,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
           )}
 
           <Image
-            src={theme === 'light' ? cross : whiteCross}
+            src={theme === "light" ? cross : whiteCross}
             height={30}
             width={30}
             alt="close modal"
@@ -134,7 +134,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
             height={200}
             width={200}
             style={{
-              objectFit: 'cover',
+              objectFit: "cover",
             }}
             className="mt-3 h-[16.5rem] w-full rounded-xl"
           />
@@ -146,7 +146,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
             height={200}
             width={200}
             style={{
-              objectFit: 'cover',
+              objectFit: "cover",
             }}
             className="mt-3 h-[16.5rem] w-full rounded-xl"
           />
@@ -187,7 +187,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
               )}
             />
             <button
-              className="mt-4 self-start rounded bg-blue500 px-4 py-2 font-semibold text-white"
+              className="hover-effect mt-4 self-start rounded bg-blue500 px-4 py-2 font-semibold text-white"
               type="submit"
             >
               Submit
