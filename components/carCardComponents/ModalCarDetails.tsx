@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { MapPin } from "lucide-react";
 
@@ -40,7 +40,7 @@ const ModalCarDetails: React.FC<ModalCarDetailsProps> = ({
   const starRating = findAverageRating(carData?.reviews);
   const [showReviewScreen, setShowReviewScreen] = useState(false);
   const availabilityColor = carAvailability
-    ? "bg-blue500"
+    ? "bg-blue500 hover-effect"
     : "bg-blue100 dark:text-gray400 dark:bg-gray800";
 
   return (
@@ -137,7 +137,7 @@ const ModalCarDetails: React.FC<ModalCarDetailsProps> = ({
           <span className="text-xs text-gray-400 sm:text-base"> day</span>
         </p>
         <button
-          className={`${availabilityColor} hover-effect h-14 rounded-[0.625rem] px-6 py-2 font-medium text-white`}
+          className={`${availabilityColor} h-14 rounded-[0.625rem] px-6 py-2 font-medium text-white`}
           onClick={handleButtonClick}
           disabled={!carAvailability}
         >
