@@ -60,7 +60,7 @@ const ShowMoreCars = ({
             onClick={() => setIsClicked(true)}
             className={`mt-8 h-10 rounded-[0.25rem] bg-blue500 px-4 sm:mb-12 sm:h-14 sm:w-[14.25rem] sm:rounded-[0.625rem] ${isClickedHideButton}`}
           >
-            <span className="text-[0.75rem] font-semibold leading-normal text-white0 sm:text-[1rem] sm:font-bold">
+            <span className="hover-effect text-[0.75rem] font-semibold leading-normal text-white0 sm:text-[1rem] sm:font-bold">
               Show More Cars
             </span>
           </Button>
