@@ -32,7 +32,6 @@ const FetchCarCard = ({
     setPrice,
     setSearch,
   ] = useFilterStore((state) => [
-    // NOTE from Zustand store
     state.search,
     state.type,
     state.capacity,
