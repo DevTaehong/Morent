@@ -38,7 +38,7 @@ const NavBar = () => {
 
   return (
     <>
-      <div className="fixed z-40 w-screen bg-white px-6 dark:border-b-gray850 dark:bg-gray900 lg:border-b xl:px-[3.75rem]">
+      <div className="fixed z-40 w-screen bg-white pl-6 pr-[2.125rem] dark:border-b-gray850 dark:bg-gray900 lg:border-b xl:pl-[3.125rem] xl:pr-[3.75rem]">
         <nav className="flex h-[5.75rem] items-center justify-between lg:h-[6.25rem] min-[1440px]:mx-auto min-[1440px]:max-w-[82.5rem]">
           <Link
             href="/"
